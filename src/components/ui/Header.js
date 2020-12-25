@@ -15,6 +15,11 @@ import { useTheme } from '@material-ui/core/styles'
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import logo from '../../assets/logo.svg'
 
 function ElevationScroll(props) {
@@ -83,6 +88,9 @@ const useStyles = makeStyles(theme => ({
       opacity: 1
     }
   },
+  appbar: {
+    backgroundColor: theme.palette.common.blue,
+  },
   drawerIconContainer: {
     marginLeft: "auto",
     "&:hover": {
@@ -93,9 +101,20 @@ const useStyles = makeStyles(theme => ({
     height: "50px",
     width: "50px"
   },
-  appbar: {
+  drawer: {
     backgroundColor: theme.palette.common.blue,
-  }  
+  },
+  drawerItem: {
+    ...theme.typography.tab,
+    color: "white",
+    opacity: 0.7
+  },
+  drawerItemSelected: {
+    opacity: 1
+  },
+  drawerItemEstimate: {
+    backgroundColor: theme.palette.common.orange
+  }
 }))
 
 const Header = () => {
@@ -124,11 +143,21 @@ const Header = () => {
     setOpenMenu(false)
   }
 
-  const menuOptions = [{name: "Services", "link": "/services"}, {name: "Custom Software Development",
-    "link": "/customsoftware"}, {name: "Mobile App Development", link: "/mobileapps"}, 
-      {name: "Website Development", "link": "/websites"
-  }]
+  const menuOptions = [
+    {name: "Services", link: "/services"},
+    {name: "Custom Software Development", link: "/customsoftware"},
+    {name: "Mobile App Development", link: "/mobileapps"}, 
+    {name: "Website Development", link: "/websites"}
+  ]
   
+  const routes = [
+    {name: "Home", link: "/"},
+    {name: "Services", link: "/services"},
+    {name: "The Revolution", link: "/revolution"},
+    {name: "About Us", link: "/about"},
+    {name: "Contact Us", link: "/contact"},
+  ]
+
   const [value, setValue] = useState(0)
 
   const handleChange = (e, newValue) => {
@@ -245,8 +274,119 @@ const Header = () => {
   const drawer = (
     <>
       <SwipeableDrawer disableBackdropTransition={!iOS} disableDiscovery={iOS} 
-        open={openDrawer} onClose={() => setOpenDrawer(false)} onOpen={() => setOpenDrawer(true)} >
-        Example drawer
+        open={openDrawer} onClose={() => setOpenDrawer(false)} onOpen={() => setOpenDrawer(true)} 
+        classes={{paper: classes.drawer}} >
+        <List disablePadding>
+          <ListItem 
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(0)}
+            }
+            divider 
+            button 
+            component={Link} 
+            to="/" 
+            selected={value === 0}
+          >
+            <ListItemText
+              className={value === 0 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem}
+              disableTypography
+            >
+              Home
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(1)
+            }}
+            divider
+            button
+            component={Link}
+            to="/services"
+            selected={value === 1}
+            >
+            <ListItemText
+              className={value === 1 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem}
+              disableTypography
+            >
+              Services
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(2)
+            }}
+            divider
+            button
+            component={Link}
+            to="/revolution"
+            selected={value === 2}
+          >
+            <ListItemText
+              className={value === 2 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem}
+              disableTypography
+            >
+              The revolution
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(3)
+            }}
+            divider
+            button
+            component={Link}
+            to="/about"
+            selected={value === 3}
+          >
+            <ListItemText
+              className={value === 3 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem}
+              disableTypography
+            >
+              About Us
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(4)
+            }}
+            divider
+            button
+            component={Link}
+            to="/contact"
+            selected={value === 4}
+          >
+            <ListItemText
+              className={value === 4 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem}
+              disableTypography
+            >
+              Contact Us
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(5)
+            }}
+            divider
+            button
+            component={Link}
+            to="/estimate"
+            selected={value === 5}
+            className={classes.drawerItemEstimate}
+          >
+            <ListItemText
+              className={value === 5 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem}
+              disableTypography
+            >
+              Free Estimate
+            </ListItemText>
+          </ListItem>
+        </List>
       </SwipeableDrawer>
       <IconButton disableRipple className={classes.drawerIconContainer} >
         <MenuIcon onClick={() => setOpenDrawer(!openDrawer)} className={classes.drawerIcon} />
