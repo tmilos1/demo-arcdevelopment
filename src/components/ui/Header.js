@@ -17,7 +17,6 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import logo from '../../assets/logo.svg'
@@ -90,6 +89,7 @@ const useStyles = makeStyles(theme => ({
   },
   appbar: {
     backgroundColor: theme.palette.common.blue,
+    zIndex: theme.zIndex.modal + 1
   },
   drawerIconContainer: {
     marginLeft: "auto",
@@ -110,7 +110,10 @@ const useStyles = makeStyles(theme => ({
     opacity: 0.7
   },
   drawerItemSelected: {
-    opacity: 1
+    opacity: 1, 
+    "& .MuiListItemText-root": {
+      opacity: 1
+    }
   },
   drawerItemEstimate: {
     backgroundColor: theme.palette.common.orange
@@ -218,10 +221,11 @@ const Header = () => {
       elevation={0}
       MenuListProps={{onMouseLeave: handleClose}}
       keepMounted
+      style={{zIndex: 1302}}
     >
       {menuOptions.map((option, i) => (
         <MenuItem
-          key={option.i}
+          key={`${option}${i}`}
           component={Link}
           to={option.link} 
           classes={{root: classes.menuItem}}
@@ -246,6 +250,8 @@ const Header = () => {
         open={openDrawer} onClose={() => setOpenDrawer(false)} onOpen={() => setOpenDrawer(true)} 
         classes={{paper: classes.drawer}} >
 
+        <div className={classes.toolbarMargin}></div>
+
         <List disablePadding>
 
           {routes.map((route) => (
@@ -260,10 +266,10 @@ const Header = () => {
                 setOpenDrawer(false);
                 setValue(route.activeIndex)}
               }
-            
+              classes={{selected: classes.drawerItemSelected}}
             >
               <ListItemText
-                className={value === route.activeIndex ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem}
+                className={classes.drawerItem}
                 disableTypography              
               >
                 {route.name}
@@ -281,10 +287,10 @@ const Header = () => {
             component={Link}
             to="/estimate"
             selected={value === 5}
-            className={classes.drawerItemEstimate}            
+            classes={{root: classes.drawerItemEstimate}}
           >
             <ListItemText
-              className={value === 5 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem}
+              className={classes.drawerItem}
               disableTypography
             >
               Free Estimate
@@ -292,8 +298,8 @@ const Header = () => {
           </ListItem>
         </List>
       </SwipeableDrawer>
-      <IconButton disableRipple className={classes.drawerIconContainer} >
-        <MenuIcon onClick={() => setOpenDrawer(!openDrawer)} className={classes.drawerIcon} />
+      <IconButton disableRipple className={classes.drawerIconContainer} onClick={() => setOpenDrawer(!openDrawer)} >
+        <MenuIcon className={classes.drawerIcon} />
       </IconButton>
     </>
   )
