@@ -120,14 +120,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Header = () => {
+const Header = (props) => {
   const classes = useStyles()
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down("md"))
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [openMenu, setOpenMenu] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
   const [openDrawer, setOpenDrawer] = useState(false)
 
   const handleClick = (e) => {
@@ -138,7 +137,7 @@ const Header = () => {
   const handleMenuItemClick = (e, i) => {
     setAnchorEl(e.currentTarget)
     setOpenMenu(false)
-    setSelectedIndex(i)
+    props.setSelectedIndex(i)
   }
 
   const handleClose = (e) => {
@@ -162,10 +161,8 @@ const Header = () => {
     {name: "Contact Us", link: "/contact", activeIndex: 4},
   ]
 
-  const [value, setValue] = useState(0)
-
   const handleChange = (e, newValue) => {
-    setValue(newValue)
+    props.setValue(newValue)
   }
 
   useEffect(() => {
@@ -173,10 +170,10 @@ const Header = () => {
     [...menuOptions, ...routes].forEach(route => {
       switch (window.location.pathname) {
         case `${route.link}`:
-          if (value !== route.activeIndex) {
-            setValue(route.activeIndex)
-            if (route.selectedIndex && route.selectedIndex !== selectedIndex) {
-              setSelectedIndex(route.selectedIndex)
+          if (props.value !== route.activeIndex) {
+            props.setValue(route.activeIndex)
+            if (route.selectedIndex && route.selectedIndex !== props.selectedIndex) {
+              props.setSelectedIndex(route.selectedIndex)
             }
           }
           break;
@@ -185,12 +182,12 @@ const Header = () => {
       }
     })
 
-  }, [value, menuOptions, selectedIndex, routes])
+  }, [props.value, menuOptions, props.selectedIndex, routes])
 
   const tabs = (
     <>
     <Tabs
-      value={value}
+      value={props.value}
       onChange={handleChange}
       className={classes.tabContainer}
       indicatorColor="primary"
@@ -231,10 +228,10 @@ const Header = () => {
           classes={{root: classes.menuItem}}
           onClick={event => {
             handleMenuItemClick(event, i)
-            setValue(1)
+            props.setValue(1)
             handleClose()
           }}
-          selected={i === selectedIndex && value === 1}>
+          selected={i === props.selectedIndex && props.value === 1}>
           {option.name}
         </MenuItem>
       ))}
@@ -261,10 +258,10 @@ const Header = () => {
               button
               component={Link} 
               to={route.link}
-              selected={value === route.activeIndex}
+              selected={props.value === route.activeIndex}
               onClick={() => {
                 setOpenDrawer(false);
-                setValue(route.activeIndex)}
+                props.setValue(route.activeIndex)}
               }
               classes={{selected: classes.drawerItemSelected}}
             >
@@ -280,13 +277,13 @@ const Header = () => {
           <ListItem
             onClick={() => {
               setOpenDrawer(false);
-              setValue(5)
+              props.setValue(5)
             }}
             divider
             button
             component={Link}
             to="/estimate"
-            selected={value === 5}
+            selected={props.value === 5}
             classes={{root: classes.drawerItemEstimate}}
           >
             <ListItemText
@@ -313,7 +310,7 @@ const Header = () => {
               component={Link}
               to="/"
               className={classes.logoContainer}
-              onClick={() => { setValue(0) }}
+              onClick={() => { props.setValue(0) }}
               disableRipple
             >
               <img src={logo} className={classes.logo} alt="company logo" />
